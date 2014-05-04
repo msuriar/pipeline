@@ -11,8 +11,14 @@ def main():
 
   ticks = range(20)
   for _ in ticks:
+    pipelineprint(pipeline)
     for station in pipeline:
       station.work()
+
+def pipelineprint(pipeline):
+  """Pretty print pipeline."""
+  totals = [ s.total for s in pipeline ]
+  print ' ---> '.join([str(t) for t in totals])
 
 class Station(object):
   """Station is a class representing each workstation."""
