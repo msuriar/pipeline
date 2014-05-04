@@ -31,8 +31,8 @@ class Pipeline(object):
 
   def tick(self):
     """Advance pipeline."""
-    for stations in self.stations:
-      stations.work()
+    for station in self.stations:
+      station.tick()
 
   def dump(self):
     """Dump pretty printed pipeline."""
@@ -40,23 +40,31 @@ class Pipeline(object):
 
 class Station(object):
   """Station is a class representing each workstation."""
-  def __init__(self, src=False, succ=None):
+  def __init__(self, src=False, succ=None, minwork=1, maxwork=7):
     self.src = src
     self.succ = succ
+    self.minwork = minwork
+    self.maxwork = maxwork
     self.in_q = 0
+    self.out_q = 0
 
   def __str__(self):
     if self.src:
       return ">>>"
     elif self.sink:
-      return "||| {}".format(self.in_q)
+      return "[ {}||{} ]".format(self.in_q, self.out_q)
     else:
-      return str(self.in_q)
+      return "[ {},{} ]".format(self.in_q, self.out_q)
 
   @property
   def sink(self):
     "Is this a sink station?"
     return None == self.succ
+
+  def tick(self):
+    """Tick."""
+    amount = self.work()
+    self.send(amount)
 
   def rcv(self, amount):
     """Receive work."""
@@ -64,12 +72,19 @@ class Station(object):
 
   def work(self):
     """Do work."""
-    if self.src:
-      self.succ.rcv(random.choice(range(1, 7)))
-    elif not self.sink:
-      throughput = min(self.in_q, random.choice(range(1, 7)))
-      self.succ.rcv(throughput)
-      self.in_q -= throughput
+    amount = random.choice(range(self.minwork, self.maxwork))
+    if not self.src:
+      amount  = min(amount, self.in_q)
+
+    self.in_q -= amount
+    self.out_q += amount
+    return amount
+
+  def send(self, amount):
+    """Send to next station."""
+    if not self.sink:
+      self.out_q -= amount
+      self.succ.rcv(amount)
 
 if __name__ == "__main__":
   main()
