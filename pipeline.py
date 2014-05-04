@@ -6,7 +6,7 @@ def main():
   pipe = Pipeline(6)
   ticks = range(20)
   for _ in ticks:
-    pipe.dump()
+    print pipe
     print pipe.summary
     pipe.tick()
 
@@ -36,10 +36,6 @@ class Pipeline(object):
     """Advance pipeline."""
     for station in self.stations:
       station.tick()
-
-  def dump(self):
-    """Dump pretty printed pipeline."""
-    print self
 
   @property
   def summary(self):
