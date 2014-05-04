@@ -1,6 +1,14 @@
 """Simulate a pipeline with multiple stations able to produce units of work."""
 import random
 
+def main():
+  """Set up and run pipeline."""
+  pipeline = [None]*6
+  pipeline[5] = Station(sink=True)
+  for i in range(1, 5).reverse():
+    pipeline[i] = Station(succ=i+1)
+  pipeline[0] = Station(src=True, succ=1)
+
 class Station(object):
   """Station is a class representing each workstation."""
   def __init__(self, src=False, sink=False, succ=None):
