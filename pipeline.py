@@ -3,11 +3,12 @@ import random
 
 def main():
   """Set up and run pipeline."""
-  pipeline = Pipeline(6)
+  pipe = Pipeline(6)
   ticks = range(20)
   for _ in ticks:
-    pipeline.dump()
-    pipeline.tick()
+    pipe.dump()
+    print pipe.summary
+    pipe.tick()
 
 class Pipeline(object):
   """Pipeline class."""
@@ -40,10 +41,18 @@ class Pipeline(object):
     """Dump pretty printed pipeline."""
     print self
 
+  @property
+  def summary(self):
+    """Summary of pipeline."""
+    output = "WIP: {}; Done: {}"
+    return output.format(self.work_in_progress, self.completed_work)
+
+  @property
   def work_in_progress(self):
     """Work in progress across pipeline."""
     return sum((s.work_in_progress for s in self.stations))
 
+  @property
   def completed_work(self):
     """Completed work across pipeline."""
     return sum((s.completed_work for s in self.stations))
@@ -99,7 +108,9 @@ class Station(object):
   @property
   def work_in_progress(self):
     """Work in progress at this station."""
-    if self.sink:
+    if self.src:
+      return self.out_q
+    elif self.sink:
       return self.in_q
     else:
       return self.in_q + self.out_q
