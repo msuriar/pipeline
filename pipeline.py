@@ -26,6 +26,9 @@ class Pipeline(object):
     pipeline[0] = Station(src=True, succ=pipeline[1])
     return pipeline
 
+  def __str__(self):
+    return ' ---> '.join([str(s) for s in self.stations])
+
   def tick(self):
     """Advance pipeline."""
     for stations in self.stations:
@@ -33,9 +36,7 @@ class Pipeline(object):
 
   def dump(self):
     """Dump pretty printed pipeline."""
-    totals = [str(s.total) for s in self.stations]
-    totals[0] = ">>>"
-    print ' ---> '.join(totals)
+    print self
 
 class Station(object):
   """Station is a class representing each workstation."""
@@ -44,6 +45,14 @@ class Station(object):
     self.sink = sink
     self.succ = succ
     self.total = 0
+
+  def __str__(self):
+    if self.src:
+      return ">>>"
+    elif self.sink:
+      return "||| {}".format(self.total)
+    else:
+      return str(self.total)
 
   def rcv(self, amount):
     """Receive work."""
