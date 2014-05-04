@@ -5,11 +5,11 @@ def main():
   """Set up and run pipeline."""
   pipeline = [None]*6
   pipeline[5] = Station(sink=True)
-  for i in range(1, 5).reverse():
-    pipeline[i] = Station(succ=i+1)
-  pipeline[0] = Station(src=True, succ=1)
+  for i in reversed(range(1, 5)):
+    pipeline[i] = Station(succ=pipeline[i+1])
+  pipeline[0] = Station(src=True, succ=pipeline[1])
 
-  ticks = 20
+  ticks = range(20)
   for _ in ticks:
     for station in pipeline:
       station.work()
