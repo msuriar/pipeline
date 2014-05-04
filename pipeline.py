@@ -43,15 +43,15 @@ class Station(object):
   def __init__(self, src=False, succ=None):
     self.src = src
     self.succ = succ
-    self.total = 0
+    self.in_q = 0
 
   def __str__(self):
     if self.src:
       return ">>>"
     elif self.sink:
-      return "||| {}".format(self.total)
+      return "||| {}".format(self.in_q)
     else:
-      return str(self.total)
+      return str(self.in_q)
 
   @property
   def sink(self):
@@ -60,16 +60,16 @@ class Station(object):
 
   def rcv(self, amount):
     """Receive work."""
-    self.total += amount
+    self.in_q += amount
 
   def work(self):
     """Do work."""
     if self.src:
       self.succ.rcv(random.choice(range(1, 7)))
     elif not self.sink:
-      throughput = min(self.total, random.choice(range(1, 7)))
+      throughput = min(self.in_q, random.choice(range(1, 7)))
       self.succ.rcv(throughput)
-      self.total -= throughput
+      self.in_q -= throughput
 
 if __name__ == "__main__":
   main()
