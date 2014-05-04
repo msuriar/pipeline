@@ -6,7 +6,6 @@ def main():
   pipe = Pipeline(6)
   ticks = range(20)
   for _ in ticks:
-    print pipe
     print pipe.summary
     pipe.tick()
 
