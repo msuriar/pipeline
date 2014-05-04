@@ -23,6 +23,9 @@ class Station(object):
 
   def work(self):
     """Do work."""
-    if not self.sink:
+    if self.src:
+      self.succ.rcv(random.choice(range(1, 7)))
+    elif not self.sink:
       throughput = min(self.total, random.choice(range(1, 7)))
-      self.succ.total += throughput
+      self.succ.rcv(throughput)
+      self.total -= throughput
