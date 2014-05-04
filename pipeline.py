@@ -40,6 +40,14 @@ class Pipeline(object):
     """Dump pretty printed pipeline."""
     print self
 
+  def work_in_progress(self):
+    """Work in progress across pipeline."""
+    return sum((s.work_in_progress for s in self.stations))
+
+  def completed_work(self):
+    """Completed work across pipeline."""
+    return sum((s.completed_work for s in self.stations))
+
 class Station(object):
   """Station is a class representing each workstation."""
   def __init__(self, src=False, succ=None, minwork=1, maxwork=7):
@@ -54,9 +62,9 @@ class Station(object):
     if self.src:
       return ">>>"
     elif self.sink:
-      return "[ {}||{} ]".format(self.in_q, self.out_q)
+      return "[{}||{}]".format(self.in_q, self.out_q)
     else:
-      return "[ {},{} ]".format(self.in_q, self.out_q)
+      return "[{},{}]".format(self.in_q, self.out_q)
 
   @property
   def sink(self):
@@ -87,6 +95,22 @@ class Station(object):
     if not self.sink:
       self.out_q -= amount
       self.succ.rcv(amount)
+
+  @property
+  def work_in_progress(self):
+    """Work in progress at this station."""
+    if self.sink:
+      return self.in_q
+    else:
+      return self.in_q + self.out_q
+
+  @property
+  def completed_work(self):
+    """Completed work at this station."""
+    if self.sink:
+      return self.out_q
+    else:
+      return 0
 
 if __name__ == "__main__":
   main()
