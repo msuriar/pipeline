@@ -9,6 +9,11 @@ def main():
     pipeline[i] = Station(succ=i+1)
   pipeline[0] = Station(src=True, succ=1)
 
+  ticks = 20
+  for _ in ticks:
+    for station in pipeline:
+      station.work()
+
 class Station(object):
   """Station is a class representing each workstation."""
   def __init__(self, src=False, sink=False, succ=None):
@@ -29,3 +34,6 @@ class Station(object):
       throughput = min(self.total, random.choice(range(1, 7)))
       self.succ.rcv(throughput)
       self.total -= throughput
+
+if __name__ == "__main__":
+  main()
