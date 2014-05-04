@@ -20,14 +20,14 @@ class Pipeline(object):
 
   def __buildpipeline(self):
     """Construct pipeline."""
-    pipeline = [None]*self.length
-    pipeline[-1] = Station(minwork=self.minwork, maxwork=self.maxwork)
+    pipe = [None]*self.length
+    pipe[-1] = Station(minwork=self.minwork, maxwork=self.maxwork)
     for i in reversed(range(1, self.length - 1)):
-      pipeline[i] = Station(succ=pipeline[i+1], minwork=self.minwork,
+      pipe[i] = Station(succ=pipe[i+1], minwork=self.minwork,
           maxwork=self.maxwork)
-    pipeline[0] = Station(src=True, succ=pipeline[1], minwork=self.minwork,
+    pipe[0] = Station(src=True, succ=pipe[1], minwork=self.minwork,
         maxwork=self.maxwork)
-    return pipeline
+    return pipe
 
   def __str__(self):
     return ' ---> '.join([str(s) for s in self.stations])
