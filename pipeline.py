@@ -20,7 +20,7 @@ class Pipeline(object):
   def __buildpipeline(self):
     """Construct pipeline."""
     pipeline = [None]*self.length
-    pipeline[-1] = Station(sink=True)
+    pipeline[-1] = Station()
     for i in reversed(range(1, self.length - 1)):
       pipeline[i] = Station(succ=pipeline[i+1])
     pipeline[0] = Station(src=True, succ=pipeline[1])
@@ -40,9 +40,8 @@ class Pipeline(object):
 
 class Station(object):
   """Station is a class representing each workstation."""
-  def __init__(self, src=False, sink=False, succ=None):
+  def __init__(self, src=False, succ=None):
     self.src = src
-    self.sink = sink
     self.succ = succ
     self.total = 0
 
@@ -53,6 +52,11 @@ class Station(object):
       return "||| {}".format(self.total)
     else:
       return str(self.total)
+
+  @property
+  def sink(self):
+    "Is this a sink station?"
+    return None == self.succ
 
   def rcv(self, amount):
     """Receive work."""
