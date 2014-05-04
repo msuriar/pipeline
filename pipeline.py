@@ -9,12 +9,6 @@ def main():
     pipeline.dump()
     pipeline.tick()
 
-def pipelineprint(pipeline):
-  """Pretty print pipeline."""
-  totals = [ s.total for s in pipeline ]
-  print ' ---> '.join([str(t) for t in totals])
-
-
 class Pipeline(object):
   """Pipeline class."""
   def __init__(self, length, minwork=1, maxwork=7):
@@ -39,7 +33,6 @@ class Pipeline(object):
 
   def dump(self):
     """Dump pretty printed pipeline."""
-
     totals = [str(s.total) for s in self.stations]
     totals[0] = ">>>"
     print ' ---> '.join(totals)
