@@ -1,14 +1,6 @@
 """Simulate a pipeline with multiple stations able to produce units of work."""
 import random
 
-def main():
-  """Set up and run pipeline."""
-  pipe = Pipeline(6)
-  ticks = range(20)
-  for _ in ticks:
-    print pipe.summary
-    pipe.tick()
-
 class Pipeline(object):
   """Pipeline class."""
   def __init__(self, length, minwork=1, maxwork=7):
@@ -128,6 +120,3 @@ class Station(object):
       return self.out_q
     else:
       return 0
-
-if __name__ == "__main__":
-  main()
