@@ -16,6 +16,7 @@ class Pipeline(object):
     self.minwork = minwork
     self.maxwork = maxwork
     self.stations = self.__buildpipeline()
+    self.ticks = 0
 
   def __buildpipeline(self):
     """Construct pipeline."""
@@ -35,12 +36,14 @@ class Pipeline(object):
     """Advance pipeline."""
     for station in self.stations:
       station.tick()
+    self.ticks += 1
 
   @property
   def summary(self):
     """Summary of pipeline."""
-    output = "WIP: {}; Done: {}"
-    return output.format(self.work_in_progress, self.completed_work)
+    output = "WIP: {}; Done: {}; Throughput: {}"
+    return output.format(self.work_in_progress, self.completed_work,
+        self.throughput)
 
   @property
   def work_in_progress(self):
@@ -51,6 +54,14 @@ class Pipeline(object):
   def completed_work(self):
     """Completed work across pipeline."""
     return sum((s.completed_work for s in self.stations))
+
+  @property
+  def throughput(self):
+    """Throughput of this pipeline at this point in time."""
+    if self.ticks != 0:
+      return float(self.completed_work)/self.ticks
+    else:
+      return 0
 
 class Station(object):
   """Station is a class representing each workstation."""
